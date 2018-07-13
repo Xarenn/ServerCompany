@@ -1,4 +1,4 @@
-package com.complex.server.persistence.repositories.specification;
+package com.complex.server.persistence.repositories.specifications;
 
 import com.complex.server.persistence.domain.Invoice;
 import com.complex.server.persistence.repositories.AbstractSpecification;

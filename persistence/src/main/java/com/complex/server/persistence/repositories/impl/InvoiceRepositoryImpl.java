@@ -2,34 +2,37 @@ package com.complex.server.persistence.repositories.impl;
 
 import com.complex.server.persistence.domain.Invoice;
 import com.complex.server.persistence.repositories.InvoiceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.complex.server.persistence.repositories.SimpleRepositoryImpl;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository
-@Transactional
-public class InvoiceRepositoryImpl implements InvoiceRepository {
+@Repository @Transactional public class InvoiceRepositoryImpl extends SimpleRepositoryImpl<Invoice>
+    implements InvoiceRepository {
 
-    @Autowired
-    private EntityManager entityManager;
+    @PersistenceContext private EntityManager entityManager;
 
-    public Invoice get(long index) {
-        return entityManager.find(Invoice.class, index);
+    @Override public Invoice get(long index) {
+        return super.get(Invoice.class, index);
     }
 
     @Override public void save(Invoice invoice) {
-        entityManager.persist(invoice);
+        super.save(invoice);
     }
 
     @Override public void remove(long id) {
-        entityManager.remove(id);
+
+    }
+
+    @Override public void remove(Invoice invoice) {
+        super.remove(invoice);
     }
 
     @Override public Invoice getById(long id) {
@@ -44,7 +47,8 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 
     @Override public List<Invoice> getByIds(List<Long> ids) {
 
-        Query query = entityManager.createQuery("from " + Invoice.class.getSimpleName() +  " item where item.id in :ids");
+        Query query = entityManager
+            .createQuery("from " + Invoice.class.getSimpleName() + " item where item.id in :ids");
         query.setParameter("ids", ids);
 
         return query.getResultList();

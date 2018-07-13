@@ -1,2 +1,5 @@
 .idea/
 .gradle/
+out/
+persistence/out
+service/out
