@@ -1,0 +1,5 @@
+rootProject.name = 'server'
+
+include 'service'
+include 'persistence'
+
