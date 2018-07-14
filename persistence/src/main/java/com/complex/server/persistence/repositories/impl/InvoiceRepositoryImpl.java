@@ -1,6 +1,7 @@
 package com.complex.server.persistence.repositories.impl;
 
 import com.complex.server.persistence.domain.Invoice;
+import com.complex.server.persistence.domain.PaymentMethod;
 import com.complex.server.persistence.repositories.InvoiceRepository;
 import com.complex.server.persistence.repositories.SimpleRepositoryImpl;
 import org.springframework.stereotype.Repository;
@@ -9,10 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Repository @Transactional public class InvoiceRepositoryImpl extends SimpleRepositoryImpl<Invoice>
     implements InvoiceRepository {
@@ -25,10 +30,6 @@ import java.util.List;
 
     @Override public void save(Invoice invoice) {
         super.save(invoice);
-    }
-
-    @Override public void remove(long id) {
-
     }
 
     @Override public void remove(Invoice invoice) {
@@ -52,6 +53,26 @@ import java.util.List;
         query.setParameter("ids", ids);
 
         return query.getResultList();
+    }
+
+    public Invoice getMostExpensiveInvoice(List<Long> ids) {
+        List<Invoice> invoices = getByIds(ids);
+
+        return invoices.stream().max(Comparator.comparing(Invoice::getValue))
+            .orElseThrow(NoSuchElementException::new);
+    }
+
+    public List<Invoice> getInvoicesPayedBySpecifyType(PaymentMethod paymentMethod, long userid) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Invoice> criteriaQuery = criteriaBuilder.createQuery(Invoice.class);
+        Root<Invoice> root = criteriaQuery.from(Invoice.class);
+
+        criteriaQuery.select(root).where(criteriaBuilder.gt(root.get("Userid"), userid));
+
+        List<Invoice> invoices = entityManager.createQuery(criteriaQuery).getResultList();
+
+        return invoices.stream().filter(inv -> inv.getPaymentMethod().equals(paymentMethod))
+            .collect(Collectors.toList());
     }
 
 }

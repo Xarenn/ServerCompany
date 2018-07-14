@@ -18,5 +18,4 @@ public abstract class SimpleRepositoryImpl<T> {
     protected void remove(T item) {
         entityManager.remove(item);
     }
-
 }

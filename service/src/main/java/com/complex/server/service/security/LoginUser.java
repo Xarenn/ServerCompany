@@ -20,22 +20,10 @@ public class LoginUser implements UserDetails {
         this.authorities = new ArrayList<>();
     }
 
-    public LoginUser(String email, String password, List<GrantedAuthority> authorities) {
+    LoginUser(String email, String password, List<GrantedAuthority> authorities) {
         this.email = email;
         this.password = password;
         this.authorities = authorities;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override
