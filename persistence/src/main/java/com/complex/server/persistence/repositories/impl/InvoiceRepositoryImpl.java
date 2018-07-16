@@ -47,10 +47,14 @@ import java.util.stream.Collectors;
 
     @Override public List<Invoice> getByIds(List<Long> ids) {
 
-        Query query = entityManager
-            .createQuery("from " + Invoice.class.getSimpleName() + " item where item.id in :ids");
+        Query query = entityManager.createQuery("from Invoices item where item.id in :ids");
         query.setParameter("ids", ids);
 
+        return query.getResultList();
+    }
+
+    public List<Invoice> getAll() {
+        Query query = entityManager.createQuery("Select inv from Invoices", Invoice.class);
         return query.getResultList();
     }
 

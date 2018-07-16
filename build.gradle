@@ -21,6 +21,7 @@ sourceCompatibility = 1.8
 repositories { mavenCentral() }
 
 dependencies {
+    compile project(':persistence')
     compile project(':service')
 
     testCompile("org.springframework.boot:spring-boot-starter-test")

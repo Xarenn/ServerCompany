@@ -7,14 +7,28 @@ import com.complex.server.persistence.repositories.InvoiceRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 public class InvoiceRepositoryImplTest extends JpaTest {
 
     @Autowired
     private InvoiceRepository repository;
 
+    @Test public void getInvoiceFromDatabaseTest() {
+        Invoice inv = makeInvoiceForTest(1);
+
+        repository.save(inv);
+
+        assertEquals(repository.get(inv.getId()), inv);
+    }
+
     @Test public void addInvoiceToDatabaseTest() {
         Invoice inv = makeInvoiceForTest(2);
+
         repository.save(inv);
+
+        assertEquals(repository.get(inv.getId()).getUserId(), inv.getUserId());
     }
 
     private Invoice makeInvoiceForTest(long id) {

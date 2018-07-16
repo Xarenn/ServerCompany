@@ -3,28 +3,13 @@ package com.complex.server.persistence.repositories.impl;
 import com.complex.server.persistence.domain.Invoice;
 import com.complex.server.persistence.domain.PaymentMethod;
 import com.complex.server.persistence.domain.User;
-import com.complex.server.persistence.repositories.UserRepository;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Transactional
-@Repository
-public class UserRepositoryImpl implements UserRepository {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    @Override public void save(User user) {
-        em.persist(user);
-    }
-
+public class UserRepositoryImpl {
 
     private List<User> getAllUsers(List<Long> ids) {
         return Arrays.asList(getUser(ids.get(0)), getUser(ids.get(1)));
@@ -76,9 +61,5 @@ public class UserRepositoryImpl implements UserRepository {
         } else {
             return Collections.emptyList();
         }
-    }
-
-    @Override public User findById(long id) {
-        return null;
     }
 }
