@@ -3,6 +3,7 @@ package com.complex.server.service.controller;
 import com.complex.server.persistence.domain.Invoice;
 import com.complex.server.persistence.domain.User;
 import com.complex.server.persistence.repositories.impl.UserRepositoryImpl;
+import com.complex.server.service.controller.DTO.StatisticsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,6 +38,11 @@ import java.util.List;
     @RequestMapping(value = "/invoice", method = RequestMethod.GET) @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Invoice> getInvoice(@RequestParam("id") long id) {
         return new ResponseEntity<>(userRepository.getInvoice(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/statistics", method = RequestMethod.GET) @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<StatisticsDTO> getStatistics(@RequestParam("id") long id) {
+        return new ResponseEntity<>(new StatisticsDTO(id), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET) @PreAuthorize("hasRole('ADMIN')")
