@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -54,7 +55,7 @@ import java.util.stream.Collectors;
     }
 
     public List<Invoice> getAll() {
-        Query query = entityManager.createQuery("Select inv from Invoices", Invoice.class);
+        TypedQuery<Invoice> query = entityManager.createQuery("Select inv from Invoices", Invoice.class);
         return query.getResultList();
     }
 
@@ -77,5 +78,4 @@ import java.util.stream.Collectors;
         return invoices.stream().filter(inv -> inv.getPaymentMethod().equals(paymentMethod))
             .collect(Collectors.toList());
     }
-
 }

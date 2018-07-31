@@ -1,14 +1,15 @@
 package com.complex.server.persistence.domain;
 
-
 import javax.persistence.*;
 
-@Entity @Table(name = "Invoices") public class Invoice {
+import java.util.Objects;
+
+@Entity(name = "Invoices") public class Invoice {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", updatable = false, nullable = false) private long id;
+    @Column(name = "Invoice_ID", updatable = false, nullable = false) private long id;
 
-    @Column(name = "UserId") private long userId;
+    @Column(name = "User_ID") private long userId;
 
     @Column(name = "Value") private double value;
 
@@ -133,5 +134,28 @@ import javax.persistence.*;
 
     @Override public String toString() {
         return "User: " + this.id;
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Invoice))
+            return false;
+        Invoice invoice = (Invoice) o;
+        return id == invoice.id && userId == invoice.userId
+            && Double.compare(invoice.value, value) == 0 && Objects.equals(seller, invoice.seller)
+            && Objects.equals(sellerAddress, invoice.sellerAddress) && Objects
+            .equals(sellerNIP, invoice.sellerNIP) && Objects
+            .equals(phoneNumber, invoice.phoneNumber) && Objects.equals(buyer, invoice.buyer)
+            && Objects.equals(buyerAddress, invoice.buyerAddress) && Objects
+            .equals(buyerNIP, invoice.buyerNIP) && Objects.equals(dateInvoice, invoice.dateInvoice)
+            && Objects.equals(datePayment, invoice.datePayment)
+            && paymentMethod == invoice.paymentMethod;
+    }
+
+    @Override public int hashCode() {
+
+        return Objects.hash(id, userId, value, seller, sellerAddress, sellerNIP, phoneNumber, buyer,
+            buyerAddress, buyerNIP, dateInvoice, datePayment, paymentMethod);
     }
 }

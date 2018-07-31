@@ -1,25 +1,21 @@
 package com.complex.server.persistence.domain;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
-public class User {
+@Entity(name = "Users") public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Id @Column(name = "USER_ID") @GeneratedValue(strategy = GenerationType.AUTO) private long id;
 
-    private String password;
+    @Column(name = "Password") private String password;
 
-    private String login;
+    @Column(name = "Login") private String login;
 
-    private String name;
+    @Column(name = "Name") private String name;
 
-    private String countInvoices;
-
-    private List<Invoice> invoices;
+    @OneToMany(cascade = CascadeType.ALL,
+        fetch = FetchType.LAZY) private List<Invoice> invoices;
 
     public List<Invoice> getInvoices() {
         return invoices;
@@ -61,11 +57,19 @@ public class User {
         this.name = name;
     }
 
-    public String getCountInvoices() {
-        return countInvoices;
+    @Override public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof User))
+            return false;
+        User user = (User) o;
+        return this.id == user.id && Objects.equals(this.password, user.password) && Objects
+            .equals(this.login, user.login) && Objects.equals(this.name, user.name) && Objects
+            .equals(this.invoices, user.invoices);
     }
 
-    public void setCountInvoices(String countInvoices) {
-        this.countInvoices = countInvoices;
+    @Override public int hashCode() {
+
+        return Objects.hash(id, password, login, name, invoices);
     }
 }

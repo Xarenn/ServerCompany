@@ -16,6 +16,6 @@ public abstract class SimpleRepositoryImpl<T> {
     }
 
     protected void remove(T item) {
-        entityManager.remove(item);
+        entityManager.remove(entityManager.contains(item) ? item : entityManager.merge(item));
     }
 }

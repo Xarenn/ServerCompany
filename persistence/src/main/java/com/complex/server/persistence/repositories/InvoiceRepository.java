@@ -10,5 +10,7 @@ public interface InvoiceRepository {
     void save(Invoice invoice);
     Invoice getById(long id);
     List<Invoice> getByIds(List<Long> ids);
+    List<Invoice> getAll();
+    void remove(Invoice invoice);
 
 }

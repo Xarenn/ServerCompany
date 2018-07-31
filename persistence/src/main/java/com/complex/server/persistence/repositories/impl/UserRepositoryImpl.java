@@ -1,65 +1,44 @@
 package com.complex.server.persistence.repositories.impl;
 
-import com.complex.server.persistence.domain.Invoice;
-import com.complex.server.persistence.domain.PaymentMethod;
 import com.complex.server.persistence.domain.User;
+import com.complex.server.persistence.repositories.SimpleRepositoryImpl;
+import com.complex.server.persistence.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class UserRepositoryImpl {
+@Repository
+@Transactional
+public class UserRepositoryImpl extends SimpleRepositoryImpl<User> implements UserRepository {
 
-    private List<User> getAllUsers(List<Long> ids) {
-        return Arrays.asList(getUser(ids.get(0)), getUser(ids.get(1)));
+    @Autowired
+    private EntityManager entityManager;
+
+    @Override public void save(User user) {
+        super.save(user);
     }
 
-    public List<Invoice> getInvoices(long id) {
-        List<Invoice> invoices = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            Invoice invoice = getInvoice(i);
-            invoices.add(invoice);
-        }
-        return invoices;
+    @Override public User findById(long id) {
+        return super.get(User.class, id);
     }
 
-    public Invoice getInvoice(long id) {
-
-        Invoice invoice = new Invoice();
-        invoice.setBuyer("BUYER");
-        invoice.setBuyerAddress("BUYER ADDRESS");
-        invoice.setBuyerNIP("235632463456346");
-        invoice.setDateInvoice("DATA WYSTAWIENIA");
-        invoice.setDatePayment("DATA PLATNOSCI");
-        invoice.setId(id);
-        invoice.setPaymentMethod(PaymentMethod.cash);
-        invoice.setPhoneNumber("3246324235235");
-        invoice.setSeller("SPRZEDAWCA");
-        invoice.setSellerNIP("235632463456346");
-        invoice.setSellerAddress("ADDRESS SPRZEDAWCY");
-        invoice.setUserId(id);
-        invoice.setValue(id);
-
-        return invoice;
+    @Override public void remove(User user) {
+        super.remove(user);
     }
 
-    public User getUser(long id) {
-        User user = new User();
-
-        user.setId(id);
-        user.setLogin("Loginek");
-        user.setName("Imie");
-        user.setPassword("tajne");
-
-        return user;
+    public List<User> getAll() {
+        TypedQuery<User> query = entityManager.createQuery("SELECT usr FROM Users usr", User.class);
+        return query.getResultList();
     }
 
-    public List<User> getAdminUsers(String password, List<Long> ids) {
-        if (password.equals("pass")) {
-            return getAllUsers(ids);
-        } else {
-            return Collections.emptyList();
-        }
+    public User getUserByName(String name) {
+        TypedQuery<User> query = entityManager.createQuery(
+            "SELECT usr FROM Users usr WHERE usr.name = :name", User.class);
+        return query.setParameter("name", name).getSingleResult();
     }
+
 }
