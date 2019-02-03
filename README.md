@@ -6,4 +6,4 @@ PostgresSQL with Spring Data JPA
 
 # How to run it?
 
-Use gradle for it in main directory <code>gradle run</code>
+Use gradle for it in main directory <code>gradle build run</code>
